@@ -1,0 +1,611 @@
+@font-face {
+    font-family: "CormorantSC";
+    src: url("/assets/fonts/CormorantSC-Medium.ttf");
+}
+
+/* CSS переменные для тем */
+:root {
+    --bg-primary: #FFFFFF;
+    --text-primary: #121212;
+    --text-secondary: #575757;
+    --text-tertiary: #9C9C9C;
+    --accent-primary: #9B4B4B;
+    --accent-secondary: #f3f3f3;
+    --border-color: #DEDEDE;
+    --overlay-bg: #FFFFFF;
+    --input-bg: transparent;
+    --filter-bg: transparent;
+    --pagination-active-bg: #f3f3f3;
+    --arrow-filter: brightness(0) invert(0);
+}
+
+[data-theme="dark"] {
+    --bg-primary: #121212;
+    --text-primary: #DEDEDE;
+    --text-secondary: #575757;
+    --text-tertiary: #9C9C9C;
+    --accent-primary: #AB8956;
+    --accent-secondary: #1A1818;
+    --border-color: #1A1818;
+    --overlay-bg: #121212;
+    --input-bg: #1A1818;
+    --filter-bg: #1A1818;
+    --pagination-active-bg: #1A1818;
+    --arrow-filter: brightness(0) invert(1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body {
+    background-color: var(--bg-primary);
+    padding: 0 clamp(16px, 5vw, 60px);
+}
+
+h1, h2, .overlay-title, .overlay-title-hover, .filter-block-title {
+    font-family: "CormorantSC";
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+h1 { font-size: clamp(16px, 3vw, 24px); }
+h2 { font-size: clamp(14px, 2.5vw, 20px); }
+
+/* Хедер */
+header {
+    display: flex;
+    justify-content: end;
+}
+
+header img {
+    padding: clamp(16px, 4vw, 28px) 0;
+    width: clamp(20px, 4vw, 32px);
+    height: auto;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+header img:hover { opacity: 0.8; }
+
+/* Поисковая строка */
+.search-section {
+    margin: clamp(30px, 8vw, 50px) 0 clamp(20px, 5vw, 30px) 0;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: clamp(6px, 2vw, 12px);
+    width: 100%;
+}
+
+.search-icon, .filter-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.search-icon { width: clamp(44px, 8vw, 64px); }
+.filter-icon { width: clamp(36px, 7vw, 56px); }
+
+.search-icon img, .filter-icon img {
+    display: block;
+    width: clamp(16px, 3vw, 22px);
+    height: auto;
+    object-fit: contain;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: clamp(12px, 3vw, 16px) 0;
+    font-size: clamp(12px, 2vw, 16px);
+    text-align: left;
+    background: transparent;
+    min-width: 0;
+    font-family: "Inter";
+    font-weight: 300;
+    color: var(--text-primary);
+}
+
+.search-input::placeholder {
+    text-align: left;
+    color: var(--text-tertiary);
+    font-size: clamp(12px, 2vw, 16px);
+    font-family: "Inter";
+    font-weight: 300;
+}
+
+/* Галерея */
+.gallery {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(24px, 6vw, 40px);
+    margin-bottom: clamp(40px, 10vw, 80px);
+}
+
+/* Карточка картины */
+.painting-card { width: 100%; cursor: pointer; }
+
+.painting-image-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.painting-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    transition: 0.3s;
+}
+
+.painting-card:hover .painting-image { transform: scale(1.1); }
+
+.painting-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: clamp(16px, 4vw, 24px);
+    background: var(--overlay-bg);
+    height: clamp(48px, 12vw, 72px);
+}
+
+.overlay-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(8px, 2vw, 16px);
+    height: 100%;
+}
+
+.overlay-text {
+    flex: 1;
+    padding: 0 clamp(8px, 2vw, 12px);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.overlay-title, .overlay-title-hover {
+    font-size: clamp(12px, 2.5vw, 18px);
+    margin-bottom: clamp(2px, 1vw, 6px);
+    line-height: 1.3;
+}
+
+.overlay-year, .overlay-year-hover {
+    font-family: "Inter";
+    font-size: clamp(10px, 2vw, 14px);
+    font-weight: 700;
+    color: var(--accent-primary);
+    line-height: 1.4;
+}
+
+.original-text {
+    position: absolute;
+    top: 50%;
+    left: clamp(8px, 2vw, 12px);
+    right: clamp(8px, 2vw, 12px);
+    transform: translateY(-50%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    opacity: 1;
+}
+
+.hover-text {
+    position: absolute;
+    top: 50%;
+    left: clamp(8px, 2vw, 12px);
+    right: clamp(8px, 2vw, 12px);
+    transform: translateX(-100%) translateY(-50%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    opacity: 0;
+}
+
+.painting-card:hover .original-text {
+    transform: translateY(calc(100% + 50%)) translateY(-50%);
+    opacity: 0;
+}
+
+.painting-card:hover .hover-text {
+    transform: translateX(0) translateY(-50%);
+    opacity: 1;
+}
+
+.overlay-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background-color: var(--accent-primary);
+    width: clamp(28px, 6vw, 40px);
+    height: 100%;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.overlay-arrow img {
+    display: block;
+    width: clamp(14px, 3vw, 20px);
+    height: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+.overlay-arrow:hover { transform: scale(1.05); }
+
+/* Пагинация */
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: clamp(40px, 10vw, 60px);
+    margin-bottom: clamp(60px, 15vw, 100px);
+    padding: 0 clamp(16px, 5vw, 60px);
+    gap: 20px;
+}
+
+.pagination-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+    width: clamp(16px, 3vw, 28px);
+    height: clamp(16px, 3vw, 28px);
+    flex-shrink: 0;
+}
+
+.pagination-arrow img {
+    display: block;
+    width: clamp(10px, 2vw, 16px);
+    height: auto;
+    object-fit: contain;
+    filter: var(--arrow-filter);
+}
+
+.pagination-arrow.left img { transform: rotate(180deg); }
+.pagination-arrow:hover { opacity: 0.7; transform: scale(1.05); }
+
+.pagination-numbers {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pagination-number, .pagination-dots {
+    font-family: "Inter";
+    font-size: clamp(14px, 2.5vw, 20px);
+    font-weight: 300;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: clamp(24px, 5vw, 32px);
+    height: clamp(24px, 5vw, 32px);
+}
+
+.pagination-number {
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.pagination-number.active {
+    font-weight: 500;
+    background-color: var(--pagination-active-bg);
+    color: var(--text-primary);
+    border-radius: clamp(6px, 1.5vw, 10px);
+}
+
+.pagination-number:hover:not(.active) {
+    background-color: var(--accent-secondary);
+    border-radius: clamp(6px, 1.5vw, 10px);
+}
+
+/* Меню фильтрации */
+.filter-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 85%;
+    height: 100%;
+    background: var(--bg-primary);
+    z-index: 999;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    padding: clamp(16px, 4vw, 24px) clamp(16px, 4vw, 24px) clamp(32px, 8vw, 48px) clamp(16px, 4vw, 24px);
+}
+
+.filter-menu.open { transform: translateX(0); }
+
+.menu-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: clamp(40px, 10vw, 80px);
+}
+
+.close-menu {
+    width: clamp(20px, 4vw, 28px);
+    height: clamp(20px, 4vw, 28px);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.close-menu:hover { opacity: 0.7; transform: scale(1.05); }
+
+.menu-content {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(32px, 8vw, 60px);
+    margin-bottom: clamp(40px, 10vw, 80px);
+}
+
+.filter-block { padding-bottom: 0; border-bottom: none; }
+
+.filter-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.filter-block-title {
+    font-size: clamp(12px, 2.5vw, 18px);
+}
+
+.filter-plus {
+    width: clamp(18px, 3.5vw, 24px);
+    height: clamp(18px, 3.5vw, 24px);
+    cursor: pointer;
+    filter: var(--arrow-filter);
+}
+
+.filter-block-submenu {
+    max-height: 0;
+    overflow: hidden;
+}
+
+.filter-block-submenu.open {
+    max-height: 200px;
+    margin-top: clamp(16px, 4vw, 32px);
+}
+
+.filter-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.filter-input {
+    width: 100%;
+    background: var(--filter-bg);
+    border: 1px solid var(--border-color);
+    border-radius: clamp(6px, 1.5vw, 10px);
+    padding: clamp(8px, 2.5vw, 12px) clamp(32px, 8vw, 48px) clamp(8px, 2.5vw, 12px) clamp(12px, 3vw, 18px);
+    font-family: "Inter";
+    font-size: clamp(12px, 1.8vw, 16px);
+    font-weight: 300;
+    color: var(--text-primary);
+    outline: none;
+}
+
+.filter-input::placeholder {
+    color: var(--text-tertiary);
+    font-family: "Inter";
+    font-size: clamp(12px, 1.8vw, 16px);
+    font-weight: 300;
+}
+
+.filter-input-icon {
+    position: absolute;
+    right: clamp(12px, 3vw, 18px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(12px, 2.5vw, 18px);
+    height: clamp(12px, 2.5vw, 18px);
+    pointer-events: none;
+    filter: var(--arrow-filter);
+}
+
+.filter-years-wrapper {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 2vw, 16px);
+    width: 100%;
+}
+
+.filter-input-years {
+    flex: 0 0 auto;
+    width: clamp(60px, 15vw, 90px);
+    background: var(--filter-bg);
+    border: 1px solid var(--border-color);
+    border-radius: clamp(6px, 1.5vw, 10px);
+    padding: clamp(8px, 2.5vw, 12px) clamp(6px, 1.5vw, 10px);
+    font-family: "Inter";
+    font-size: clamp(12px, 1.8vw, 16px);
+    font-weight: 300;
+    color: var(--text-primary);
+    text-align: center;
+    outline: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.filter-input-years:focus {
+    white-space: normal;
+    text-overflow: clip;
+}
+
+.filter-input-years::placeholder {
+    color: var(--text-tertiary);
+    font-family: "Inter";
+    font-size: clamp(12px, 1.8vw, 16px);
+    font-weight: 300;
+    text-align: center;
+}
+
+.filter-years-minus {
+    width: clamp(14px, 2.8vw, 20px);
+    height: clamp(14px, 2.8vw, 20px);
+    flex-shrink: 0;
+    filter: var(--arrow-filter);
+}
+
+.filter-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: clamp(32px, 8vw, 60px);
+}
+
+.filter-action-show, .filter-action-clear {
+    font-family: "Inter";
+    font-size: clamp(11px, 2vw, 14px);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: clamp(3px, 1vw, 6px);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-action-show { color: var(--text-secondary); }
+.filter-action-clear { color: var(--text-tertiary); }
+
+.filter-action-show:hover, .filter-action-clear:hover { opacity: 0.7; }
+
+main { display: block; }
+
+/* Адаптивность */
+@media (min-width: 768px) {
+    main {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(24px, 3vw, 40px);
+    }
+    
+    .search-section {
+        grid-column: 2 / 3;
+        width: 100%;
+        margin-bottom: 0;
+    }
+    
+    .gallery {
+        grid-column: 1 / 3;
+        display: grid;
+        grid-template-columns: subgrid;
+        gap: clamp(24px, 3vw, 40px);
+    }
+    
+    .filter-menu { width: 50%; }
+    
+    .pagination {
+        gap: clamp(24px, 4vw, 40px);
+        margin-top: clamp(50px, 8vw, 80px);
+        margin-bottom: clamp(70px, 10vw, 120px);
+    }
+    
+    .pagination-numbers { gap: clamp(16px, 3vw, 24px); }
+    
+    .painting-overlay {
+        height: clamp(52px, 8vw, 80px);
+        right: clamp(8px, 2vw, 16px);
+    }
+    
+    .overlay-text { padding: 0 clamp(10px, 2vw, 16px); }
+    .overlay-title, .overlay-title-hover { font-size: clamp(13px, 2vw, 16px); }
+    .overlay-arrow { width: clamp(18px, 3.5vw, 28px); }
+    .overlay-arrow img { width: clamp(9px, 1.8vw, 14px); }
+    .filter-block-title { font-size: clamp(14px, 2.2vw, 18px); }
+    
+    .filter-menu {
+        padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 32px) clamp(40px, 8vw, 60px) clamp(20px, 4vw, 32px);
+    }
+    
+    .menu-header { margin-bottom: clamp(50px, 10vw, 100px); }
+    .menu-content { gap: clamp(40px, 8vw, 80px); }
+    .filter-block-submenu.open { margin-top: clamp(20px, 4vw, 40px); }
+    .filter-actions { margin-top: clamp(40px, 8vw, 80px); }
+}
+
+@media (min-width: 1440px) {
+    main {
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(30px, 4vw, 50px);
+    }
+    
+    .search-section { grid-column: 3 / 4; }
+    .gallery { grid-column: 1 / 4; gap: clamp(30px, 4vw, 50px); }
+    .filter-menu { width: 33.33%; }
+    
+    .pagination {
+        gap: clamp(30px, 5vw, 50px);
+        margin-top: clamp(60px, 10vw, 100px);
+        margin-bottom: clamp(80px, 12vw, 120px);
+    }
+    
+    .pagination-numbers { gap: clamp(20px, 4vw, 30px); }
+    
+    .painting-overlay {
+        height: clamp(60px, 8vw, 80px);
+        right: clamp(16px, 3vw, 24px);
+    }
+    
+    .overlay-content { gap: clamp(12px, 2vw, 20px); }
+    .overlay-arrow { display: none; }
+    
+    .overlay-text {
+        padding-left: clamp(16px, 3vw, 24px);
+    }
+    
+    .overlay-text::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: calc(100% - 32px);
+        background-color: var(--accent-primary);
+    }
+    
+    .original-text, .hover-text {
+        left: clamp(20px, 3.5vw, 28px);
+        right: clamp(8px, 2vw, 12px);
+    }
+    
+    .overlay-title, .overlay-title-hover { font-size: clamp(14px, 2vw, 18px); }
+    .overlay-year, .overlay-year-hover { font-size: clamp(11px, 2vw, 14px); }
+    .filter-block-title { font-size: clamp(15px, 2.2vw, 20px); }
+    
+    .filter-input {
+        font-size: clamp(13px, 2vw, 16px);
+        padding: clamp(10px, 2.5vw, 14px) clamp(32px, 8vw, 48px) clamp(10px, 2.5vw, 14px) clamp(14px, 3vw, 20px);
+    }
+    
+    .filter-input::placeholder { font-size: clamp(13px, 2vw, 16px); }
+    .filter-input-years { font-size: clamp(13px, 2vw, 16px); width: clamp(80px, 15vw, 100px); }
+    .filter-input-years::placeholder { font-size: clamp(13px, 2vw, 16px); }
+    .filter-action-show, .filter-action-clear { font-size: clamp(12px, 2vw, 16px); }
+    
+    .filter-menu {
+        padding: clamp(24px, 4vw, 40px) clamp(24px, 4vw, 40px) clamp(48px, 8vw, 80px) clamp(24px, 4vw, 40px);
+    }
+    
+    .menu-header { margin-bottom: clamp(60px, 10vw, 120px); }
+    .menu-content { gap: clamp(48px, 8vw, 100px); }
+    .filter-block-submenu.open { margin-top: clamp(24px, 4vw, 48px); }
+    .filter-actions { margin-top: clamp(48px, 8vw, 100px); }
+}
