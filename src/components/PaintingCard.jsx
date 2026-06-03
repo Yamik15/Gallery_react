@@ -1,4 +1,5 @@
 const PaintingCard = ({ image, title, year, artist, location }) => {
+  console.log('PaintingCard props:', { image, title, year, artist, location });
   return (
     <div className="painting-card">
       <div className="painting-image-wrapper">

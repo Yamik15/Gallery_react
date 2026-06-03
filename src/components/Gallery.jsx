@@ -1,6 +1,7 @@
 import PaintingCard from './PaintingCard';
 
 const Gallery = ({ paintings }) => {
+  console.log('Gallery получила paintings:', paintings);
   return (
     <div className="gallery">
       {paintings.map(painting => (
@@ -9,8 +10,8 @@ const Gallery = ({ paintings }) => {
           image={painting.imageUrl}
           title={painting.title}
           year={painting.year}
-          hoverTitle={painting.artist}
-          hoverYear={painting.location}
+          artist={painting.artist}
+          location={painting.location}
         />
       ))}
     </div>

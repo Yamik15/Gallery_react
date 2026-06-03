@@ -23,6 +23,7 @@ const App = () => {
         const spec = await response.json()
         // Извлекаем пример ответа
         const paintingsArray = spec.paths["/paintings"].get.responses["200"].content["application/json"].example;
+        console.log("Первая картина из API:", paintingsArray[0]);
         setAllPaintings(paintingsArray);
       } catch (error) {
         console.error("Ошибка загрузки картин", error);
@@ -51,7 +52,7 @@ const App = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
     // Прокрутка вверх после смены страницы
-    window.scrollto({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (loading) {
@@ -70,7 +71,7 @@ const App = () => {
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          OnPageChange={handlePageChange}
+          onPageChange={handlePageChange}
         />
       )}
     </>
