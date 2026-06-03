@@ -1,17 +1,20 @@
-const Pagination = () => {
+const Pagination = ({ currentPage, totalPages, OnPageChange }) => {
+  // Массив номеров страниц
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
+
   return (
     <footer className="pagination">
-      <div className="pagination-arrow left">
+      <div className={`pagination-arrow left ${currentPage === 1 ? "disabled" : ""}`} onClick={() => currentPage > 1 && OnPageChange(currentPage - 1)}>
         <img src="/assets/icons/Arrow right_lightgray_2.svg" alt="Предыдущая" className="theme-icon" />
       </div>
       <div className="pagination-numbers">
-        <span className="pagination-number active">1</span>
-        <span className="pagination-number">2</span>
-        <span className="pagination-number">3</span>
-        <span className="pagination-dots">...</span>
-        <span className="pagination-number">9</span>
+        {pages.map(page => (
+          <span key={page} className={`pagination-number ${currentPage === page ? "active" : ""}`} onClick={() => OnPageChange(page)}>
+            {page}
+          </span>
+        ))}
       </div>
-      <div className="pagination-arrow right">
+      <div className={`pagination-arrow right ${currentPage === totalPages ? "disabled" : ""}`} onClick={() => currentPage < totalPages && OnPageChange(currentPage + 1)}>
         <img src="/assets/icons/Arrow right_lightgray_2.svg" alt="Следующая" className="theme-icon" />
       </div>
     </footer>

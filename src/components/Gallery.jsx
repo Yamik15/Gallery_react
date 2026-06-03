@@ -1,17 +1,16 @@
 import PaintingCard from './PaintingCard';
-import { paintings } from '../data/paintings';
 
-const Gallery = () => {
+const Gallery = ({ paintings }) => {
   return (
     <div className="gallery">
       {paintings.map(painting => (
         <PaintingCard
-          key={painting.id}
-          image={painting.image}
+          key={painting.id || painting.title}
+          image={painting.imageUrl}
           title={painting.title}
           year={painting.year}
-          hoverTitle={painting.hoverTitle}
-          hoverYear={painting.hoverYear}
+          hoverTitle={painting.artist}
+          hoverYear={painting.location}
         />
       ))}
     </div>

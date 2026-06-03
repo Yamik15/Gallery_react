@@ -488,6 +488,24 @@ header img:hover { opacity: 0.8; }
 
 main { display: block; }
 
+/* Свойства лоадера и отключенной стрелки пагинации */
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    font-family: "Inter", sans-serif;
+    font-size: clamp(14px, 4vw, 20px);
+    color: var(--text-primary);
+}
+
+.disabled {
+    opacity: 0,5;
+    pointer-events: none;
+    cursor: default;
+}
+
 /* Адаптивность */
 @media (min-width: 768px) {
     main {

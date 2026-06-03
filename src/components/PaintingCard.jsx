@@ -1,4 +1,4 @@
-const PaintingCard = ({ image, title, year, hoverTitle, hoverYear }) => {
+const PaintingCard = ({ image, title, year, artist, location }) => {
   return (
     <div className="painting-card">
       <div className="painting-image-wrapper">
@@ -11,8 +11,8 @@ const PaintingCard = ({ image, title, year, hoverTitle, hoverYear }) => {
                 <p className="overlay-year">{year}</p>
               </div>
               <div className="hover-text">
-                <h2 className="overlay-title-hover">{hoverTitle}</h2>
-                <p className="overlay-year-hover">{hoverYear}</p>
+                <h2 className="overlay-title-hover">{artist}</h2>
+                <p className="overlay-year-hover">{location}</p>
               </div>
             </div>
             <div className="overlay-arrow">
