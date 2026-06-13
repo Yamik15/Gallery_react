@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import './App.css';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
@@ -13,6 +13,8 @@ const App = () => {
   const [allPaintings, setAllPaintings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState({ artist: '', location: '', yearFrom: '', yearTo: '' });
 
   // Подгрузка картин
 
@@ -23,7 +25,6 @@ const App = () => {
         const spec = await response.json()
         // Извлекаем пример ответа
         const paintingsArray = spec.paths["/paintings"].get.responses["200"].content["application/json"].example;
-        console.log("Первая картина из API:", paintingsArray[0]);
         setAllPaintings(paintingsArray);
       } catch (error) {
         console.error("Ошибка загрузки картин", error);
@@ -36,42 +37,84 @@ const App = () => {
     fetchPaintings();
   }, []);
 
-  // Подсчитываем общее количество страниц
-  const totalPages = Math.ceil(allPaintings.length / ITEMS_PER_PAGE);
-  // Берем картины только для текущей страницы
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentPaintings = allPaintings.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  // Функция фильтрации
+  const filteredPaintings = useMemo(() => {
+    if (!allPaintings.length) return [];
+    let result = [...allPaintings];
+    
+    if (searchQuery.trim()) {
+      const query = searchQuery.trim().toLowerCase();
+      result = result.filter(p => p.title.toLowerCase().includes(query));
+    }
+    if (filters.artist) {
+      result = result.filter(p => p.artist === filters.artist);
+    }
+    if (filters.location) {
+      result = result.filter(p => p.location === filters.location);
+    }
+    // Фильтрация по годам: только если оба поля заполнены
+    if (filters.yearFrom && filters.yearTo) {
+      const from = parseInt(filters.yearFrom);
+      const to = parseInt(filters.yearTo);
+      result = result.filter(p => p.year >= from && p.year <= to);
+    }
+    return result;
+  }, [allPaintings, searchQuery, filters]);
 
-  // Сброс страницы, если она стала больше доступного
+  // Пагинация на основе filteredPaintings
+  const totalPages = Math.ceil(filteredPaintings.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const currentPaintings = filteredPaintings.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  // Сброс страницы при изменении фильтров или поиска
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filters]);
+
+  // Эффект для коррекции currentPage при изменении totalPages
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
     }
   }, [totalPages, currentPage]);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    // Прокрутка вверх после смены страницы
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const handleApplyFilters = (newFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
   };
 
-  if (loading) {
-    return <div className='loading'>Загрузка картин...</div>;
-  }
+  const handleClearFilters = () => {
+    setFilters({ artist: '', location: '', yearFrom: '', yearTo: '' });
+    setSearchQuery('');
+    setCurrentPage(1);
+  };
+
+  if (loading) return <div className="loading">Загрузка картин...</div>;
 
   return (
     <>
-      <FilterMenu isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} />
+      <FilterMenu
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        paintings={allPaintings}
+        onApplyFilters={handleApplyFilters}
+        onClearFilters={handleClearFilters}
+        initialFilters={filters}
+      />
       <Header />
       <main>
-        <SearchBar onFilterClick={() => setIsFilterOpen(true)} />
+        <SearchBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          onFilterClick={() => setIsFilterOpen(true)}
+        />
         <Gallery paintings={currentPaintings} />
       </main>
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={handlePageChange}
+          onPageChange={setCurrentPage}
         />
       )}
     </>

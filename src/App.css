@@ -427,7 +427,7 @@ header img:hover { opacity: 0.8; }
 
 .filter-input-years {
     flex: 0 0 auto;
-    width: clamp(60px, 15vw, 90px);
+    width: clamp(60px, 25vw, 110px);
     background: var(--filter-bg);
     border: 1px solid var(--border-color);
     border-radius: clamp(6px, 1.5vw, 10px);
@@ -439,8 +439,8 @@ header img:hover { opacity: 0.8; }
     text-align: center;
     outline: none;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-overflow: clip;
+    white-space: normal;
 }
 
 .filter-input-years:focus {
@@ -504,6 +504,33 @@ main { display: block; }
     opacity: 0,5;
     pointer-events: none;
     cursor: default;
+}
+
+.filter-input {
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right clamp(12px, 3vw, 18px) center;
+  padding-right: clamp(32px, 8vw, 48px);
+}
+
+.filter-input option {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.empty-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: clamp(40px, 10vw, 80px);
+  font-family: "Inter", sans-serif;
+  font-size: clamp(16px, 4vw, 24px);
+  font-weight: 400;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
+  border-radius: clamp(12px, 3vw, 24px);
+  margin: clamp(20px, 5vw, 40px) 0;
 }
 
 /* Адаптивность */

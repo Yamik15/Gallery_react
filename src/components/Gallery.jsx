@@ -1,7 +1,14 @@
 import PaintingCard from './PaintingCard';
 
 const Gallery = ({ paintings }) => {
-  console.log('Gallery получила paintings:', paintings);
+  if (!paintings.length) {
+    return (
+      <div className="empty-message">
+        Ничего не найдено. Попробуйте изменить поиск или сбросить фильтры...
+      </div>
+    );
+  }
+
   return (
     <div className="gallery">
       {paintings.map(painting => (
